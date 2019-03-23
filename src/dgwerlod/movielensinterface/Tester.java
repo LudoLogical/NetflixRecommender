@@ -12,17 +12,16 @@ public class Tester {
         ArrayList<Movie> movies = new ArrayList<>();
 
         try {
-            ArrayList<String> movieStrs = FileIO.readFile("ml-latest-small" + FileIO.FILE_SEPARATOR + "movies.csv");
-            for (String s : movieStrs) {
-                movies.add(CSVTranslator.translateMovie(s));
+            ArrayList<String> movieStrings = FileIO.readFile("ml-latest-small" + FileIO.FILE_SEPARATOR + "movies.csv");
+            movieStrings.remove(0); // To do with contents of movieStrings, not content
+            for (String s : movieStrings) {
                 System.out.println(s);
+                Movie now = CSVTranslator.translateMovie(s);
+                System.out.println(now);
+                movies.add(now);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        for (Movie m : movies) {
-            System.out.println(m);
         }
 
     }

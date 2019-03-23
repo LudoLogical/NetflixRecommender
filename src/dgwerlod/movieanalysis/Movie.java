@@ -18,5 +18,29 @@ public class Movie {
         this.genres = genres;
     }
 
+    public String toString() {
+
+        String formattedYear = "";
+        if (year == -1) {
+            formattedYear = "[No year given]";
+        } else {
+            formattedYear += year;
+        }
+
+        StringBuilder formattedGenres = new StringBuilder();
+        if (genres.length == 0) {
+            formattedGenres.append("[No genres listed]");
+        } else {
+            for (int i = 0; i < genres.length; i++) {
+                formattedGenres.append(genres[i]);
+                if (i != genres.length-1) {
+                    formattedGenres.append(", ");
+                }
+            }
+        }
+
+        return "ID: " + id + "\nTitle: " + title + "\nYear: " + formattedYear + "\nGenres: " + formattedGenres.toString();
+
+    }
 
 }
