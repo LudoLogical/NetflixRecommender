@@ -2,6 +2,8 @@ package dgwerlod.movieanalysis;
 
 public class Movie {
 
+    public static final int NO_YEAR = -1;
+
     private int id;
     private String title;
     private int year;
@@ -18,10 +20,15 @@ public class Movie {
         this.genres = genres;
     }
 
+    public void addLinks(String imdb, String tmdb) {
+        imdbID = imdb;
+        tmdbID = tmdb;
+    }
+
     public String toString() {
 
         String formattedYear = "";
-        if (year == -1) {
+        if (year == NO_YEAR) {
             formattedYear = "[No year given]";
         } else {
             formattedYear += year;
@@ -39,7 +46,9 @@ public class Movie {
             }
         }
 
-        return "ID: " + id + "\nTitle: " + title + "\nYear: " + formattedYear + "\nGenres: " + formattedGenres.toString();
+        return "ID: " + id + "\nTitle: " + title +
+               "\nYear: " + formattedYear + "\nGenres: " + formattedGenres.toString() +
+               "\nIMDB ID: " + imdbID + "\nTMDB ID: " + tmdbID;
 
     }
 

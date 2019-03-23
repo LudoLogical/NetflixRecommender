@@ -30,7 +30,7 @@ public class CSVTranslator {
         // If no parentheses at all, no year and only title
         if (lastOpen == -1 && lastClosed == -1) {
             title = titleAndYear.trim();
-            year = -1;
+            year = Movie.NO_YEAR;
         } else {
             // If year is present, it will be the last () item
             try {
@@ -39,12 +39,20 @@ public class CSVTranslator {
             // If year is absent, parseInt will fail
             } catch (NumberFormatException e) {
                 title = titleAndYear.trim();
-                year = -1;
+                year = Movie.NO_YEAR;
             }
 
         }
 
         return new Movie(id, title, year, genresArray);
+
+    }
+
+    public static String[] translateLinks(String s) {
+
+        int firstComma = s.indexOf(',');
+        int lastComma = s.lastIndexOf(',');
+        return new String[] {s.substring(firstComma + 1, lastComma), s.substring(lastComma + 1)};
 
     }
 
