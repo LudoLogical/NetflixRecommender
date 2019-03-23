@@ -1,5 +1,7 @@
 package dgwerlod.movieanalysis;
 
+import java.util.ArrayList;
+
 public class Movie {
 
     public static final int NO_YEAR = -1;
@@ -8,8 +10,8 @@ public class Movie {
     private String title;
     private int year;
     private String[] genres;
-    private Rating[] ratings;
-    private Tag[] tags;
+    private ArrayList<Rating> ratings = new ArrayList<>();
+    private ArrayList<Rating> tags = new ArrayList<>();
     private String imdbID;
     private String tmdbID;
 
@@ -20,9 +22,17 @@ public class Movie {
         this.genres = genres;
     }
 
+    public int getID() {
+        return id;
+    }
+
     public void addLinks(String imdb, String tmdb) {
         imdbID = imdb;
         tmdbID = tmdb;
+    }
+
+    public void addRating(Rating r) {
+        ratings.add(r);
     }
 
     public String toString() {
@@ -46,9 +56,15 @@ public class Movie {
             }
         }
 
-        return "ID: " + id + "\nTitle: " + title +
-               "\nYear: " + formattedYear + "\nGenres: " + formattedGenres.toString() +
-               "\nIMDB ID: " + imdbID + "\nTMDB ID: " + tmdbID;
+        StringBuilder formattedRatings = new StringBuilder();
+        for (Rating r : ratings) {
+            formattedRatings.append(r.toString()).append('\n');
+        }
+
+        return "Movie #" + id + ": " + title +
+               "\nReleased in " + formattedYear + " under genres " + formattedGenres.toString() +
+               "\nIMDB #" + imdbID + " and TMDB #" + tmdbID +
+               "\nThis film has received the following ratings: \n" + formattedRatings;
 
     }
 

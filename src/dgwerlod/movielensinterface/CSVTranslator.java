@@ -1,6 +1,7 @@
 package dgwerlod.movielensinterface;
 
 import dgwerlod.movieanalysis.Movie;
+import dgwerlod.movieanalysis.Rating;
 
 public class CSVTranslator {
 
@@ -53,6 +54,21 @@ public class CSVTranslator {
         int firstComma = s.indexOf(',');
         int lastComma = s.lastIndexOf(',');
         return new String[] {s.substring(firstComma + 1, lastComma), s.substring(lastComma + 1)};
+
+    }
+
+    public static Rating translateRating(String s) {
+
+        int firstComma = s.indexOf(',');
+        int secondComma = s.indexOf(',', firstComma + 1);
+        int thirdComma = s.indexOf(',', secondComma + 1);
+
+        int userID = Integer.parseInt(s.substring(0, firstComma));
+        int movieID = Integer.parseInt(s.substring(firstComma + 1, secondComma));
+        double rating = Double.parseDouble(s.substring(secondComma + 1, thirdComma));
+        int timestamp = Integer.parseInt(s.substring(thirdComma + 1));
+
+        return new Rating(rating, userID, movieID, timestamp);
 
     }
 
