@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class User {
 
-    private int userID;
+    private int id;
     private ArrayList<Rating> ratings = new ArrayList<>();
     private ArrayList<Tag> tags = new ArrayList<>();
 
-    public User(int userID) {
-        this.userID = userID;
+    public User(int id) {
+        this.id = id;
     }
 
-    public int getUserID() {
-        return userID;
+    public int getID() {
+        return id;
     }
 
     public void addRating(Rating r) {
@@ -26,7 +26,7 @@ public class User {
 
     public String toString() {
 
-        StringBuilder output = new StringBuilder("User #" + userID + " has performed the following ratings: \n");
+        StringBuilder output = new StringBuilder("User #" + id + " has performed the following ratings: \n");
         for (Rating r : ratings) {
             output.append(r.toString()).append('\n');
         }

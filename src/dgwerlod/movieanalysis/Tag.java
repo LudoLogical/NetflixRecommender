@@ -1,31 +1,30 @@
 package dgwerlod.movieanalysis;
 
-import java.util.ArrayList;
-
 public class Tag {
 
     private String tag;
-    private ArrayList<Integer> userIDs; // all users who have applied this tag
-    private ArrayList<Integer> movieIDs;
+    private int userID; // all users who have applied this tag
+    private int movieID;
     private int timestamp;
 
-    public Tag(String tag, ArrayList<Integer> userIDs, ArrayList<Integer> movieIDs, int timestamp) {
+    public Tag(String tag, int userID, int movieID, int timestamp) {
         this.tag = tag;
-        this.userIDs = userIDs;
-        this.movieIDs = movieIDs;
+        this.userID = userID;
+        this.movieID = movieID;
         this.timestamp = timestamp;
     }
 
-    public void addUserID(int id) {
-        userIDs.add(id);
+    public int getUserID() {
+        return userID;
     }
 
-    public void addMovieID(int id) {
-        movieIDs.add(id);
+    public int getMovieID() {
+        return movieID;
     }
 
-    public String getTag() {
-        return tag;
+    public String toString() {
+        return "User #" + userID + " gave movie #" + movieID +
+                " the tag \'" + tag + "\' at timestamp " + timestamp;
     }
 
 }

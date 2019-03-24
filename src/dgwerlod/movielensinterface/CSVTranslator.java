@@ -2,6 +2,7 @@ package dgwerlod.movielensinterface;
 
 import dgwerlod.movieanalysis.Movie;
 import dgwerlod.movieanalysis.Rating;
+import dgwerlod.movieanalysis.Tag;
 
 public class CSVTranslator {
 
@@ -57,7 +58,7 @@ public class CSVTranslator {
 
     }
 
-    public static Rating translateRating(String s) {
+    private static int[] ratingAndTagSetup(String s) {
 
         int firstComma = s.indexOf(',');
         int secondComma = s.indexOf(',', firstComma + 1);
@@ -65,11 +66,29 @@ public class CSVTranslator {
 
         int userID = Integer.parseInt(s.substring(0, firstComma));
         int movieID = Integer.parseInt(s.substring(firstComma + 1, secondComma));
-        double rating = Double.parseDouble(s.substring(secondComma + 1, thirdComma));
-        int timestamp = Integer.parseInt(s.substring(thirdComma + 1));
 
-        return new Rating(rating, userID, movieID, timestamp);
+        return new int[] {userID, movieID, secondComma, thirdComma};
 
     }
 
+    public static Rating translateRating(String s) {
+
+        int[] setupData = ratingAndTagSetup(s);
+
+        double rating = Double.parseDouble(s.substring(setupData[2] + 1, setupData[3]));
+        int timestamp = Integer.parseInt(s.substring(setupData[3] + 1));
+
+        return new Rating(rating, setupData[0], setupData[1], timestamp);
+
+    }
+
+    public static Tag translateTag(String s) {
+
+        int[] setupData = ratingAndTagSetup(s);
+
+        String tag = s.substring(setupData[2] + 1, setupData[3]);
+        int timestamp = Integer.parseInt(s.substring(setupData[3] + 1));
+
+        return new Tag(tag, setupData[0], setupData[1], timestamp);
+    }
 }

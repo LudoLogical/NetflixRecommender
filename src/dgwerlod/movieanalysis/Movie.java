@@ -11,7 +11,7 @@ public class Movie {
     private int year;
     private String[] genres;
     private ArrayList<Rating> ratings = new ArrayList<>();
-    private ArrayList<Rating> tags = new ArrayList<>();
+    private ArrayList<Tag> tags = new ArrayList<>();
     private String imdbID;
     private String tmdbID;
 
@@ -33,6 +33,10 @@ public class Movie {
 
     public void addRating(Rating r) {
         ratings.add(r);
+    }
+
+    public void addTag(Tag t) {
+        tags.add(t);
     }
 
     public String toString() {
