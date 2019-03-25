@@ -6,6 +6,24 @@ import dgwerlod.movieanalysis.Tag;
 
 public class CSVTranslator {
 
+    /*private ArrayList<String> getLinePieces(String line) {
+        ArrayList<String> pieces = new ArrayList<>();
+        boolean quoted = false;
+        int start = 0;
+        for (int i = 0; i < line.length(); i++) {
+            char thisChar = line.charAt(i);
+            if (thisChar == '"') {
+                quoted = !quoted;
+            } else if (thisChar == ',' && !quoted) {
+                pieces.add(line.substring(start,i));
+                start = i+1;
+            }
+        }
+        pieces.add(line.substring(start));
+
+        return pieces;
+    }*/
+
     public static Movie translateMovie(String data) {
 
         int id = Integer.parseInt(data.substring(0, data.indexOf(',')));
@@ -37,7 +55,7 @@ public class CSVTranslator {
             // If year is present, it will be the last () item
             try {
                 title = titleAndYear.substring(0, lastOpen - 1);
-                year = Integer.parseInt(titleAndYear.substring(lastOpen + 1, lastClosed));
+                year = Integer.parseInt(titleAndYear.substring(lastOpen + 1, lastOpen + 5)); // All years are 4 digits
             // If year is absent, parseInt will fail
             } catch (NumberFormatException e) {
                 title = titleAndYear.trim();

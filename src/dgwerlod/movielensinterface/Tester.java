@@ -33,7 +33,7 @@ public class Tester {
                 Movie now = CSVTranslator.translateMovie(movieStrings.get(i));
                 String[] links = CSVTranslator.translateLinks(linkStrings.get(i));
                 now.addLinks(links[0], links[1]);
-                //System.out.println(now);
+                System.out.println(now);
                 movies.add(now);
             }
 
