@@ -4,40 +4,47 @@ import dgwerlod.movieanalysis.Movie;
 import dgwerlod.movieanalysis.Rating;
 import dgwerlod.movieanalysis.Tag;
 
+import java.util.ArrayList;
+
+@SuppressWarnings("WeakerAccess")
 public class CSVTranslator {
 
-    /*private ArrayList<String> getLinePieces(String line) {
-        ArrayList<String> pieces = new ArrayList<>();
-        boolean quoted = false;
+    @SuppressWarnings("Duplicates")
+    private static ArrayList<String> getSegments(String line) {
+
+        ArrayList<String> segments = new ArrayList<>();
+        boolean inQuotes = false;
         int start = 0;
+
         for (int i = 0; i < line.length(); i++) {
             char thisChar = line.charAt(i);
             if (thisChar == '"') {
-                quoted = !quoted;
-            } else if (thisChar == ',' && !quoted) {
-                pieces.add(line.substring(start,i));
+                inQuotes = !inQuotes;
+            } else if (thisChar == ',' && !inQuotes) {
+                segments.add(line.substring(start,i));
                 start = i+1;
             }
         }
-        pieces.add(line.substring(start));
 
-        return pieces;
-    }*/
+        segments.add(line.substring(start));
+        return segments;
+
+    }
 
     public static Movie translateMovie(String data) {
 
-        int id = Integer.parseInt(data.substring(0, data.indexOf(',')));
+        ArrayList<String> segments = getSegments(data);
 
-        String genresRaw = data.substring(data.lastIndexOf(',') + 1);
+        int id = Integer.parseInt(segments.get(0));
 
         String[] genresArray;
-        if (genresRaw.equals(("(no genres listed)"))) {
+        if (segments.get(2).equals(("(no genres listed)"))) {
             genresArray = new String[0];
         } else {
-            genresArray = genresRaw.split("\\|");
+            genresArray = segments.get(2).split("\\|");
         }
 
-        String titleAndYear = data.substring(data.indexOf(',') + 1, data.lastIndexOf(','));
+        String titleAndYear = segments.get(1);
         if (titleAndYear.charAt(0) == '\"' && titleAndYear.charAt(titleAndYear.length()-1) == '\"') {
             titleAndYear = titleAndYear.substring(1, titleAndYear.length()-1);
         }
@@ -69,44 +76,33 @@ public class CSVTranslator {
     }
 
     public static String[] translateLinks(String s) {
-
-        int firstComma = s.indexOf(',');
-        int lastComma = s.lastIndexOf(',');
-        return new String[] {s.substring(firstComma + 1, lastComma), s.substring(lastComma + 1)};
-
-    }
-
-    private static int[] ratingAndTagSetup(String s) {
-
-        int firstComma = s.indexOf(',');
-        int secondComma = s.indexOf(',', firstComma + 1);
-        int thirdComma = s.indexOf(',', secondComma + 1);
-
-        int userID = Integer.parseInt(s.substring(0, firstComma));
-        int movieID = Integer.parseInt(s.substring(firstComma + 1, secondComma));
-
-        return new int[] {userID, movieID, secondComma, thirdComma};
-
+        ArrayList<String> output = getSegments(s);
+        output.remove(0); // removes user ID
+        return output.toArray(new String[] {});
     }
 
     public static Rating translateRating(String s) {
 
-        int[] setupData = ratingAndTagSetup(s);
+        ArrayList<String> segments = getSegments(s);
 
-        double rating = Double.parseDouble(s.substring(setupData[2] + 1, setupData[3]));
-        int timestamp = Integer.parseInt(s.substring(setupData[3] + 1));
+        int userID = Integer.parseInt(segments.get(0));
+        int movieID = Integer.parseInt(segments.get(1));
+        double rating = Double.parseDouble(segments.get(2));
+        int timestamp = Integer.parseInt(segments.get(3));
 
-        return new Rating(rating, setupData[0], setupData[1], timestamp);
+        return new Rating(rating, userID, movieID, timestamp);
 
     }
 
     public static Tag translateTag(String s) {
 
-        int[] setupData = ratingAndTagSetup(s);
+        ArrayList<String> segments = getSegments(s);
 
-        String tag = s.substring(setupData[2] + 1, setupData[3]);
-        int timestamp = Integer.parseInt(s.substring(setupData[3] + 1));
+        int userID = Integer.parseInt(segments.get(0));
+        int movieID = Integer.parseInt(segments.get(1));
+        String tag = segments.get(2);
+        int timestamp = Integer.parseInt(segments.get(3));
 
-        return new Tag(tag, setupData[0], setupData[1], timestamp);
+        return new Tag(tag, userID, movieID, timestamp);
     }
 }

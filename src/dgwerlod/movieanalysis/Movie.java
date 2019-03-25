@@ -1,5 +1,6 @@
 package dgwerlod.movieanalysis;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Movie {
@@ -39,6 +40,7 @@ public class Movie {
         tags.add(t);
     }
 
+    @SuppressWarnings("Duplicates")
     public String toString() {
 
         String formattedYear = "";
@@ -61,14 +63,34 @@ public class Movie {
         }
 
         StringBuilder formattedRatings = new StringBuilder();
-        for (Rating r : ratings) {
-            formattedRatings.append(r.toString()).append('\n');
+        if (ratings.size() == 0) {
+            formattedRatings.append("[No ratings yet]");
+        } else {
+            for (int i = 0; i < ratings.size(); i++) {
+                formattedRatings.append(ratings.get(i).toString());
+                if (i != ratings.size()-1) {
+                    formattedRatings.append('\n');
+                }
+            }
         }
 
-        return "Movie #" + id + ": " + title +
+        StringBuilder formattedTags = new StringBuilder();
+        if (tags.size() == 0) {
+            formattedTags.append("[No tags yet]");
+        } else {
+            for (int i = 0; i < tags.size(); i++) {
+                formattedTags.append(tags.get(i).toString());
+                if (i != tags.size()-1) {
+                    formattedTags.append('\n');
+                }
+            }
+        }
+
+        return "Movie #" + id + " is " + title +
                "\nReleased in " + formattedYear + " under genres " + formattedGenres.toString() +
                "\nIMDB #" + imdbID + " and TMDB #" + tmdbID +
-               "\nThis film has received the following ratings: \n" + formattedRatings;
+               "\nThis film has received the following ratings: \n" + formattedRatings +
+               "\nThis film has received the following tags: \n" + formattedTags;
 
     }
 

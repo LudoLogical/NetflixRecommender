@@ -1,3 +1,5 @@
+package shelby.bugs;
+
 import java.util.Arrays;
 
 public class Movie {

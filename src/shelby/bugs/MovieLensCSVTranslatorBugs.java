@@ -1,7 +1,8 @@
+package shelby.bugs;
+
 import java.util.ArrayList;
 
 public class MovieLensCSVTranslatorBugs {
-
 	
 	private ArrayList<String> getLinePieces(String line) {
 		ArrayList<String> pieces = new ArrayList<>();  // Holds comma separated pieces of the line

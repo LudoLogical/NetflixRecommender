@@ -30,7 +30,10 @@ public class User {
         for (Rating r : ratings) {
             output.append(r.toString()).append('\n');
         }
-        output.append("-- They have also issued the following tags: [WILL IMPLEMENT]");
+        output.append("-- They have also issued the following tags: \n");
+        for (Tag t : tags) {
+            output.append(t.toString()).append('\n');
+        }
 
         return output.toString();
     }

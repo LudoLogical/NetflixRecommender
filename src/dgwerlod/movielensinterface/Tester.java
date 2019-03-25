@@ -33,7 +33,7 @@ public class Tester {
                 Movie now = CSVTranslator.translateMovie(movieStrings.get(i));
                 String[] links = CSVTranslator.translateLinks(linkStrings.get(i));
                 now.addLinks(links[0], links[1]);
-                System.out.println(now);
+                //System.out.println(now);
                 movies.add(now);
             }
 
@@ -77,7 +77,7 @@ public class Tester {
             tagsStrings.remove(0);
             for (String t : tagsStrings) {
 
-                //System.out.println(tagsStrings.get(i));
+                //System.out.println(t);
                 Tag now = CSVTranslator.translateTag(t);
                 tags.add(now);
                 //System.out.println(now);

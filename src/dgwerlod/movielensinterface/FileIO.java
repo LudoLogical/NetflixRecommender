@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+@SuppressWarnings("Duplicates")
 public class FileIO {
 
     public static final String FILE_SEPARATOR = System.getProperty("file.separator");
