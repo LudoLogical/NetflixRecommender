@@ -5,20 +5,16 @@ import shelby.bugs.FileIO;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 @SuppressWarnings("WeakerAccess")
 public class NetflixTester {
 	
 	public static final String baseFile = "ml-custom-test" + FileIO.fileSep + "1Ratings.csv";
 	public static final String testFile = "ml-custom-test" + FileIO.fileSep + "1Tests.csv";
 
-	
 	public static final String moviesFile = "ml-latest-small" + FileIO.fileSep + "movies.csv";
 	public static final String linksFile = "ml-latest-small" + FileIO.fileSep + "links.csv";
 	public static final String tagsFile = "ml-latest-small" + FileIO.fileSep + "tags.csv";
-	
 
-	
 	public static void main(String[] args) throws IOException {
 		
 		System.out.println("\n***Starting the clock***");
@@ -142,8 +138,7 @@ public class NetflixTester {
 		System.out.println("Total difference between guessed and actual ratings: " + totalDifference);
 		System.out.println("Average difference between guessed and actual ratings: " + totalDifference/numberTested);
 		System.out.println("Root square mean difference between guessed and actual ratings: " + Math.sqrt(totalSquareDifference/numberTested));
-		
-		
+
 	}
 
 }

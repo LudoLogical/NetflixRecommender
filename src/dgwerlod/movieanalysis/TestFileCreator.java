@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class      TestFileCreator {
+public class TestFileCreator {
 
 	public static void main(String[] args) throws IOException {
 		
@@ -37,8 +37,6 @@ public class      TestFileCreator {
 		FileIO.writeFile(newTestsFile, testFileString);
 		
 		System.out.println("Files written as " + newRatingsFile + " and " + newTestsFile + "!");
-		
-		
 
 	}
 

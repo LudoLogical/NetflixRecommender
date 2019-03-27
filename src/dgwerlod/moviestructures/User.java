@@ -20,6 +20,15 @@ public class User {
         ratings.add(r);
     }
 
+    public double getRating(int movieID) {
+        for (Rating r : ratings) {
+            if (movieID == r.getMovieID()) {
+                return r.getRating();
+            }
+        }
+        return -1; // No such movieID
+    }
+
     public void addTag(Tag t) {
         tags.add(t);
     }
