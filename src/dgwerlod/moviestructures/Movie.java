@@ -1,6 +1,5 @@
-package dgwerlod.movieanalysis;
+package dgwerlod.moviestructures;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Movie {

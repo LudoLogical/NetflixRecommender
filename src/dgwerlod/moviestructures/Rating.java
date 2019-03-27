@@ -1,4 +1,4 @@
-package dgwerlod.movieanalysis;
+package dgwerlod.moviestructures;
 
 public class Rating {
 

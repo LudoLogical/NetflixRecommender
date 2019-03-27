@@ -1,9 +1,9 @@
 package dgwerlod.movielensinterface;
 
-import dgwerlod.movieanalysis.Movie;
-import dgwerlod.movieanalysis.Rating;
-import dgwerlod.movieanalysis.Tag;
-import dgwerlod.movieanalysis.User;
+import dgwerlod.moviestructures.Movie;
+import dgwerlod.moviestructures.Rating;
+import dgwerlod.moviestructures.Tag;
+import dgwerlod.moviestructures.User;
 
 import java.io.IOException;
 import java.util.ArrayList;

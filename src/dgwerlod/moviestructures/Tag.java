@@ -1,9 +1,9 @@
-package dgwerlod.movieanalysis;
+package dgwerlod.moviestructures;
 
 public class Tag {
 
     private String tag;
-    private int userID; // all users who have applied this tag
+    private int userID;
     private int movieID;
     private int timestamp;
 

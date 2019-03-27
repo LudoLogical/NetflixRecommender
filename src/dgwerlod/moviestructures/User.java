@@ -1,4 +1,4 @@
-package dgwerlod.movieanalysis;
+package dgwerlod.moviestructures;
 
 import java.util.ArrayList;
 
