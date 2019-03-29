@@ -29,6 +29,14 @@ public class User {
         return -1; // No such movieID
     }
 
+    public double getAverageRating() {
+        double total = 0;
+        for (Rating r : ratings) {
+            total += r.getRating();
+        }
+        return total / ratings.size();
+    }
+
     public void addTag(Tag t) {
         tags.add(t);
     }

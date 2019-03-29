@@ -10,8 +10,10 @@ import dgwerlod.moviestructures.User;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@SuppressWarnings("Duplicates")
+@SuppressWarnings({"Duplicates", "WeakerAccess"})
 public class NetflixPredictor {
+
+	public static final double CENTER_RATING = (5.0-0.5) / 2;
 
 	// Add fields to represent your database.
 	private ArrayList<Movie> movies = new ArrayList<>();
@@ -106,6 +108,8 @@ public class NetflixPredictor {
 
 			}
 
+			// TODO set users and movies for both ratings and tags for indexing
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -136,7 +140,48 @@ public class NetflixPredictor {
 	 * @pre A user with id userID and a movie with id movieID exist in the database.
 	 */
 	public double guessRating(int userID, int movieID) {
-		return 0;
+
+		// If already rated, we done
+		double previousRating = getRating(userID, movieID);
+		if (previousRating > 0) {
+			return previousRating;
+		}
+
+		// Retrieve the user and movie in question
+		User subjectUser = null;
+		Movie subjectMovie = null;
+		for (User u : users) {
+			if (userID == u.getID()) {
+				subjectUser = u;
+				break;
+			}
+		}
+		for (Movie m : movies) {
+			if (movieID == m.getID()) {
+				subjectMovie = m;
+				break;
+			}
+		}
+
+		// Ensure that the user and movie are real
+		if (subjectUser == null) {
+			throw new IllegalArgumentException(userID + " does not exist!");
+		} else if (subjectMovie == null) {
+			throw new IllegalArgumentException(movieID + " does not exist!");
+		}
+
+		// Give a score based on ratings of similar genres and tags, if any
+		double propertiesScore = 0;
+		// TODO: Get movies, genres, and score
+
+		// Handle average rating retrieval
+		double popularRating = subjectMovie.getAverageRating();
+		if (Double.isNaN(popularRating)) {
+			return CENTER_RATING;
+		} else {
+			return popularRating;
+		}
+
 	}
 	
 	/** Recommend a movie that you think this user would enjoy (but they have not currently rated it).
