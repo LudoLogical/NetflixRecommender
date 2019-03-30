@@ -31,6 +31,7 @@ public class NetflixPredictor {
 
 		try {
 
+			// Create Movie objects and assign links to them
 			// These two lists have identical movie ids for each line
 			ArrayList<String> movieStrings = FileIO.readFile(movieFilePath);
 			ArrayList<String> linkStrings = FileIO.readFile(linkFilePath);
@@ -45,6 +46,7 @@ public class NetflixPredictor {
 				movies.add(now);
 			}
 
+			// Create Ratings and User objects; assign Ratings to User/Movie
 			ArrayList<String> ratingsStrings = FileIO.readFile(ratingFilePath);
 			ratingsStrings.remove(0);
 			for (String r : ratingsStrings) {
@@ -61,6 +63,7 @@ public class NetflixPredictor {
 						userFound = true;
 						u.addRating(now);
 						//System.out.println(u);
+						break;
 					}
 				}
 				if (!userFound) {
@@ -74,6 +77,7 @@ public class NetflixPredictor {
 					if (now.getMovieID() == m.getID()) {
 						m.addRating(now);
 						//System.out.println(m);
+						break;
 					}
 				}
 
@@ -81,6 +85,7 @@ public class NetflixPredictor {
 
 			}
 
+			// Create Tag objects and assign to User/Movie
 			ArrayList<String> tagsStrings = FileIO.readFile(tagFilePath);
 			tagsStrings.remove(0);
 			for (String t : tagsStrings) {
@@ -94,6 +99,7 @@ public class NetflixPredictor {
 					if (now.getUserID() == u.getID()) {
 						u.addTag(now);
 						//System.out.println(u);
+						break;
 					}
 				}
 
@@ -101,6 +107,7 @@ public class NetflixPredictor {
 					if (now.getMovieID() == m.getID()) {
 						m.addTag(now);
 						//System.out.println(m);
+						break;
 					}
 				}
 
@@ -108,7 +115,35 @@ public class NetflixPredictor {
 
 			}
 
-			// TODO set users and movies for both ratings and tags for indexing
+			// Assign User/Movie objects to Ratings/Tags
+			for (Rating r : ratings) {
+				for (Movie m : movies) {
+					if (r.getMovieID() == m.getID()) {
+						r.setMovie(m);
+						break;
+					}
+				}
+				for (User u : users) {
+					if (r.getUserID() == u.getID()) {
+						r.setUser(u);
+						break;
+					}
+				}
+			}
+			for (Tag t : tags) {
+				for (Movie m : movies) {
+					if (t.getMovieID() == m.getID()) {
+						t.setMovie(m);
+						break;
+					}
+				}
+				for (User u : users) {
+					if (t.getUserID() == u.getID()) {
+						t.setUser(u);
+						break;
+					}
+				}
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
