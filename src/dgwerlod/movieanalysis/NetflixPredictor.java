@@ -13,7 +13,7 @@ import java.util.ArrayList;
 @SuppressWarnings({"Duplicates", "WeakerAccess"})
 public class NetflixPredictor {
 
-	public static final double CENTER_RATING = (5.0-0.5) / 2;
+	public static final double CENTER_RATING = (5.0-0.5) / 2 + 0.5;
 
 	// Add fields to represent your database.
 	private ArrayList<Movie> movies = new ArrayList<>();
@@ -160,7 +160,11 @@ public class NetflixPredictor {
 	public double getRating(int userID, int movieID) {
 	    for (User u : users) {
 	        if (userID == u.getID()) {
-	            return u.getRating(movieID);
+	            for (Rating r : u.getRatings()) {
+	                if (movieID == r.getMovieID()) {
+	                    return r.getRating();
+                    }
+                }
             }
         }
 		return -1;
@@ -205,16 +209,55 @@ public class NetflixPredictor {
 			throw new IllegalArgumentException(movieID + " does not exist!");
 		}
 
+		// Get the user's rating of an average movie
+        double subjectUserAvgRating = subjectUser.getAverageRating();
+        if (Double.isNaN(subjectUserAvgRating)) {
+            subjectUserAvgRating = CENTER_RATING;
+        }
+
 		// Give a score based on ratings of similar genres and tags, if any
-		double propertiesScore = 0;
-		// TODO: Get movies, genres, and score
+		double genresScore = 0, tagsScore = 0;
+		String[] subjectMovieGenres = subjectMovie.getGenres();
+		ArrayList<Tag> subjectMovieTags = subjectMovie.getTags();
+		ArrayList<Rating> subjectUserRatings = subjectUser.getRatings();
+		for (Rating r : subjectUserRatings) {
+			int multiplier = 0;
+            for (String reviewedGenre : r.getMovie().getGenres()) {
+                for (String nowGenre : subjectMovieGenres) {
+                    if (nowGenre.equals(reviewedGenre)) {
+                    	multiplier++;
+                    	break;
+                    }
+                }
+            }
+			genresScore += multiplier * (r.getRating() - subjectUserAvgRating);
+        }
+		for (Rating r : subjectUserRatings) {
+			int multiplier = 0;
+			for (Tag reviewedTag : r.getMovie().getTags()) {
+				for (Tag nowTag : subjectMovieTags) {
+					if (nowTag.getTag().equals(reviewedTag.getTag())) {
+						multiplier++;
+						break;
+					}
+				}
+			}
+			tagsScore += multiplier * (r.getRating() - subjectUserAvgRating);
+		}
 
 		// Handle average rating retrieval
 		double popularRating = subjectMovie.getAverageRating();
 		if (Double.isNaN(popularRating)) {
 			return CENTER_RATING;
 		} else {
-			return popularRating;
+			double output = popularRating + genresScore/600 + tagsScore/400;
+			if (output > 5) {
+				return 5;
+			} else if (output < 0.5) {
+				return 0.5;
+			} else {
+				return output;
+			}
 		}
 
 	}

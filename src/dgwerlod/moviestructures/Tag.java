@@ -16,6 +16,10 @@ public class Tag {
         this.timestamp = timestamp;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
     public int getUserID() {
         return userID;
     }

@@ -47,6 +47,14 @@ public class Movie {
         tags.add(t);
     }
 
+    public String[] getGenres() {
+        return genres;
+    }
+
+    public ArrayList<Tag> getTags() {
+        return tags;
+    }
+
     @SuppressWarnings("Duplicates")
     public String toString() {
 
