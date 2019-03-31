@@ -13,6 +13,10 @@ import java.util.ArrayList;
 @SuppressWarnings({"Duplicates", "WeakerAccess"})
 public class NetflixPredictor {
 
+	public static final double POPULARITY_WEIGHT = 1;
+	public static final double GENRES_WEIGHT = 1;
+	public static final double TAGS_WEIGHT = 1;
+
 	public static final double CENTER_RATING = (5.0-0.5) / 2 + 0.5;
 
 	// Add fields to represent your database.
@@ -204,60 +208,94 @@ public class NetflixPredictor {
 
 		// Ensure that the user and movie are real
 		if (subjectUser == null) {
-			throw new IllegalArgumentException(userID + " does not exist!");
+			throw new IllegalArgumentException("User ID #" + userID + " does not exist!");
 		} else if (subjectMovie == null) {
-			throw new IllegalArgumentException(movieID + " does not exist!");
+			throw new IllegalArgumentException("Movie ID #" + movieID + " does not exist!");
 		}
-
-		// Get the user's rating of an average movie
-        double subjectUserAvgRating = subjectUser.getAverageRating();
-        if (Double.isNaN(subjectUserAvgRating)) {
-            subjectUserAvgRating = CENTER_RATING;
-        }
 
 		// Give a score based on ratings of similar genres and tags, if any
 		double genresScore = 0, tagsScore = 0;
+        int totalGenreScores = 0, totalTagScores = 0;
 		String[] subjectMovieGenres = subjectMovie.getGenres();
 		ArrayList<Tag> subjectMovieTags = subjectMovie.getTags();
 		ArrayList<Rating> subjectUserRatings = subjectUser.getRatings();
 		for (Rating r : subjectUserRatings) {
-			int multiplier = 0;
+			int matches = 0; // matching genres between r and subjectMovie
             for (String reviewedGenre : r.getMovie().getGenres()) {
                 for (String nowGenre : subjectMovieGenres) {
                     if (nowGenre.equals(reviewedGenre)) {
-                    	multiplier++;
+						matches++;
                     	break;
                     }
                 }
             }
-			genresScore += multiplier * (r.getRating() - subjectUserAvgRating);
+			genresScore += matches * r.getRating();
+            totalGenreScores += matches;
         }
 		for (Rating r : subjectUserRatings) {
-			int multiplier = 0;
+			int matches = 0; // matching tags between r and subjectMovie
 			for (Tag reviewedTag : r.getMovie().getTags()) {
 				for (Tag nowTag : subjectMovieTags) {
 					if (nowTag.getTag().equals(reviewedTag.getTag())) {
-						multiplier++;
+						matches++;
 						break;
 					}
 				}
 			}
-			tagsScore += multiplier * (r.getRating() - subjectUserAvgRating);
+			tagsScore += matches * r.getRating();
+			totalTagScores += matches;
+		}
+
+		// Scale scores to expected ratings by averaging
+		double genresExpectedRating = 0, tagsExpectedRating = 0;
+		if (totalGenreScores != 0) {
+			genresExpectedRating = genresScore / totalGenreScores;
+		}
+		if (totalTagScores != 0) {
+			tagsExpectedRating = tagsScore / totalTagScores;
+		}
+
+		// Get the user's rating of an average movie
+		double subjectUserAvgRating = subjectUser.getAverageRating();
+		if (Double.isNaN(subjectUserAvgRating)) {
+			subjectUserAvgRating = CENTER_RATING;
 		}
 
 		// Handle average rating retrieval
 		double popularRating = subjectMovie.getAverageRating();
 		if (Double.isNaN(popularRating)) {
-			return CENTER_RATING;
+			popularRating = 0;
+		}
+
+		// Scale popularRating to popularScore based on user average rating
+		double popularExpectedRating = popularRating * (subjectUserAvgRating / CENTER_RATING);
+
+		int divisor = 0;
+		if (popularExpectedRating != 0) {
+			divisor += POPULARITY_WEIGHT;
+		}
+		if (genresExpectedRating != 0) {
+			divisor += GENRES_WEIGHT;
+		}
+		if (tagsExpectedRating != 0) {
+			divisor += TAGS_WEIGHT;
+		}
+
+		double output;
+		if (divisor == 0) {
+			output = CENTER_RATING; // No data to predict with
 		} else {
-			double output = popularRating + genresScore/600 + tagsScore/400;
-			if (output > 5) {
-				return 5;
-			} else if (output < 0.5) {
-				return 0.5;
-			} else {
-				return output;
-			}
+			output = (popularExpectedRating * POPULARITY_WEIGHT + genresExpectedRating *
+					  GENRES_WEIGHT + tagsExpectedRating * TAGS_WEIGHT) / divisor;
+		}
+
+		// Reduce extra error by accounting for overconfidence
+		if (output > 5) {
+			return 5;
+		} else if (output < 0.5) {
+			return 0.5;
+		} else {
+			return output;
 		}
 
 	}
