@@ -13,9 +13,16 @@ import java.util.ArrayList;
 @SuppressWarnings({"Duplicates", "WeakerAccess"})
 public class NetflixPredictor {
 
-	public static final double POPULARITY_WEIGHT = 1;
-	public static final double GENRES_WEIGHT = 1;
-	public static final double TAGS_WEIGHT = 1;
+	/* Current Best Score:
+	Runtime: 0:5:32
+	Total difference between guessed and actual ratings: 6782.66324946808
+	Average difference between guessed and actual ratings: 0.6782663249468079
+	Root square mean difference between guessed and actual ratings: 0.8890619580767919
+	 */
+
+	public static final double POPULARITY_WEIGHT = 0.9;
+	public static final double GENRES_WEIGHT = 6.25;
+	public static final double TAGS_WEIGHT = 1.9;
 
 	public static final double CENTER_RATING = (5.0-0.5) / 2 + 0.5;
 
@@ -231,9 +238,8 @@ public class NetflixPredictor {
             }
 			genresScore += matches * r.getRating();
             totalGenreScores += matches;
-        }
-		for (Rating r : subjectUserRatings) {
-			int matches = 0; // matching tags between r and subjectMovie
+
+			matches = 0; // matching tags between r and subjectMovie
 			for (Tag reviewedTag : r.getMovie().getTags()) {
 				for (Tag nowTag : subjectMovieTags) {
 					if (nowTag.getTag().equals(reviewedTag.getTag())) {
@@ -244,7 +250,7 @@ public class NetflixPredictor {
 			}
 			tagsScore += matches * r.getRating();
 			totalTagScores += matches;
-		}
+        }
 
 		// Scale scores to expected ratings by averaging
 		double genresExpectedRating = 0, tagsExpectedRating = 0;
@@ -260,17 +266,15 @@ public class NetflixPredictor {
 		if (Double.isNaN(subjectUserAvgRating)) {
 			subjectUserAvgRating = CENTER_RATING;
 		}
-
 		// Handle average rating retrieval
 		double popularRating = subjectMovie.getAverageRating();
 		if (Double.isNaN(popularRating)) {
 			popularRating = 0;
 		}
-
 		// Scale popularRating to popularScore based on user average rating
 		double popularExpectedRating = popularRating * (subjectUserAvgRating / CENTER_RATING);
 
-		int divisor = 0;
+		double divisor = 0;
 		if (popularExpectedRating != 0) {
 			divisor += POPULARITY_WEIGHT;
 		}
@@ -282,8 +286,8 @@ public class NetflixPredictor {
 		}
 
 		double output;
-		if (divisor == 0) {
-			output = CENTER_RATING; // No data to predict with
+		if (divisor == 0.0) {
+			output = subjectUserAvgRating; // No data to predict with
 		} else {
 			output = (popularExpectedRating * POPULARITY_WEIGHT + genresExpectedRating *
 					  GENRES_WEIGHT + tagsExpectedRating * TAGS_WEIGHT) / divisor;
