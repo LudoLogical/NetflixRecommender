@@ -1,6 +1,6 @@
 package dgwerlod.moviestructures;
 
-public class Tag {
+public class Tag implements Comparable<Tag> {
 
     private String tag;
     private int userID;
@@ -8,6 +8,11 @@ public class Tag {
     private int movieID;
     private Movie movie;
     private int timestamp;
+
+    // Creates a dummy Tag for comparison
+    public Tag(String tag) {
+        this.tag = tag;
+    }
 
     public Tag(String tag, int userID, int movieID, int timestamp) {
         this.tag = tag;
@@ -47,6 +52,10 @@ public class Tag {
     public String toString() {
         return "User #" + userID + " gave movie #" + movieID +
                 " the tag \'" + tag + "\' at timestamp " + timestamp;
+    }
+
+    public int compareTo(Tag o) {
+        return tag.compareTo(o.tag);
     }
 
 }

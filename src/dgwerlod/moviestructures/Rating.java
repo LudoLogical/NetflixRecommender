@@ -1,6 +1,6 @@
 package dgwerlod.moviestructures;
 
-public class Rating {
+public class Rating implements Comparable<Rating> {
 
     private double rating;
     private int userID;
@@ -8,6 +8,12 @@ public class Rating {
     private int movieID;
     private Movie movie;
     private int timestamp;
+
+    // Creates a dummy Rating for comparison
+    public Rating(int userID, int movieID) {
+        this.userID = userID;
+        this.movieID = movieID;
+    }
 
     public Rating(double rating, int userID, int movieID, int timestamp) {
         this.rating = rating;
@@ -51,6 +57,15 @@ public class Rating {
     public String toString() {
         return "User #" + userID + " gave movie #" + movieID +
                " a rating of " + rating + " at timestamp " + timestamp;
+    }
+
+    public int compareTo(Rating o) {
+        int userDiff = userID - o.userID;
+        if (userDiff == 0) {
+            return movieID - o.movieID;
+        } else {
+            return userDiff;
+        }
     }
 
 }

@@ -2,7 +2,7 @@ package dgwerlod.moviestructures;
 
 import java.util.ArrayList;
 
-public class User {
+public class User implements Comparable<User> {
 
     private int id;
     private ArrayList<Rating> ratings = new ArrayList<>();
@@ -48,6 +48,10 @@ public class User {
         }
 
         return output.toString();
+    }
+
+    public int compareTo(User o) {
+        return id - o.id;
     }
 
 }

@@ -2,7 +2,7 @@ package dgwerlod.moviestructures;
 
 import java.util.ArrayList;
 
-public class Movie {
+public class Movie implements Comparable<Movie> {
 
     public static final int NO_YEAR = -1;
 
@@ -14,6 +14,11 @@ public class Movie {
     private ArrayList<Tag> tags = new ArrayList<>();
     private String imdbID;
     private String tmdbID;
+
+    // Creates a dummy Movie for comparison
+    public Movie(int id) {
+        this.id = id;
+    }
 
     public Movie(int id, String title, int year, String[] genres) {
         this.id = id;
@@ -107,6 +112,10 @@ public class Movie {
                "\nThis film has received the following ratings: \n" + formattedRatings +
                "\nThis film has received the following tags: \n" + formattedTags;
 
+    }
+
+    public int compareTo(Movie o) {
+        return id - o.id;
     }
 
 }

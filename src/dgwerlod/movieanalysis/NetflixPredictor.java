@@ -9,6 +9,7 @@ import dgwerlod.moviestructures.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 @SuppressWarnings({"Duplicates", "WeakerAccess"})
 public class NetflixPredictor {
@@ -38,7 +39,7 @@ public class NetflixPredictor {
 	 * @param tagFilePath The full path to the tags database.
 	 * @param linkFilePath The full path to the links database.
 	 */
-	public NetflixPredictor (String movieFilePath, String ratingFilePath, String tagFilePath, String linkFilePath) {
+	public NetflixPredictor(String movieFilePath, String ratingFilePath, String tagFilePath, String linkFilePath) {
 
 		try {
 
@@ -128,33 +129,18 @@ public class NetflixPredictor {
 
 			// Assign User/Movie objects to Ratings/Tags
 			for (Rating r : ratings) {
-				for (Movie m : movies) {
-					if (r.getMovieID() == m.getID()) {
-						r.setMovie(m);
-						break;
-					}
-				}
-				for (User u : users) {
-					if (r.getUserID() == u.getID()) {
-						r.setUser(u);
-						break;
-					}
-				}
+				r.setMovie(movies.get(Collections.binarySearch(movies, new Movie(r.getMovieID()))));
+				r.setUser(users.get(Collections.binarySearch(users, new User(r.getUserID()))));
 			}
 			for (Tag t : tags) {
-				for (Movie m : movies) {
-					if (t.getMovieID() == m.getID()) {
-						t.setMovie(m);
-						break;
-					}
-				}
-				for (User u : users) {
-					if (t.getUserID() == u.getID()) {
-						t.setUser(u);
-						break;
-					}
-				}
+				t.setMovie(movies.get(Collections.binarySearch(movies, new Movie(t.getMovieID()))));
+				t.setUser(users.get(Collections.binarySearch(users, new User(t.getUserID()))));
 			}
+
+			Collections.sort(movies);
+			Collections.sort(users);
+			Collections.sort(ratings);
+			Collections.sort(tags);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -169,15 +155,13 @@ public class NetflixPredictor {
      * movie does not exist, or the movie has not been rated by this user.
 	 */
 	public double getRating(int userID, int movieID) {
-	    for (User u : users) {
-	        if (userID == u.getID()) {
-	            for (Rating r : u.getRatings()) {
-	                if (movieID == r.getMovieID()) {
-	                    return r.getRating();
-                    }
-                }
-            }
-        }
+		int uIndex = Collections.binarySearch(users, new User(userID));
+		if (uIndex >= 0) {
+			int rIndex = Collections.binarySearch(users.get(uIndex).getRatings(), new Rating(userID, movieID));
+			if (rIndex >= 0) {
+				return ratings.get(rIndex).getRating();
+			}
+		}
 		return -1;
 	}
 	
@@ -198,27 +182,8 @@ public class NetflixPredictor {
 		}
 
 		// Retrieve the user and movie in question
-		User subjectUser = null;
-		Movie subjectMovie = null;
-		for (User u : users) {
-			if (userID == u.getID()) {
-				subjectUser = u;
-				break;
-			}
-		}
-		for (Movie m : movies) {
-			if (movieID == m.getID()) {
-				subjectMovie = m;
-				break;
-			}
-		}
-
-		// Ensure that the user and movie are real
-		if (subjectUser == null) {
-			throw new IllegalArgumentException("User ID #" + userID + " does not exist!");
-		} else if (subjectMovie == null) {
-			throw new IllegalArgumentException("Movie ID #" + movieID + " does not exist!");
-		}
+		User subjectUser = users.get(Collections.binarySearch(users, new User(userID)));
+		Movie subjectMovie = movies.get(Collections.binarySearch(movies, new Movie(movieID)));
 
 		// Give a score based on ratings of similar genres and tags, if any
 		double genresScore = 0, tagsScore = 0;
@@ -294,10 +259,10 @@ public class NetflixPredictor {
 		}
 
 		// Reduce extra error by accounting for overconfidence
-		if (output > 5) {
-			return 5;
-		} else if (output < 0.5) {
-			return 0.5;
+		if (output > 4.5) {
+			return 4.5;
+		} else if (output < 1) {
+			return 1;
 		} else {
 			return output;
 		}
