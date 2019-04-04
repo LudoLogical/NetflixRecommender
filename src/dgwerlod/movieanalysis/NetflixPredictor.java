@@ -259,10 +259,10 @@ public class NetflixPredictor {
 		}
 
 		// Reduce extra error by accounting for overconfidence
-		if (output > 4.5) {
-			return 4.5;
-		} else if (output < 1) {
-			return 1;
+		if (output > 4.4) {
+			return 4.4;
+		} else if (output < 0.75) {
+			return 0.75;
 		} else {
 			return output;
 		}
@@ -275,7 +275,19 @@ public class NetflixPredictor {
 	 * @pre A user with id userID exists in the database.
 	 */
 	public int recommendMovie(int userID) {
-		return 0;
+		double highestRating = 0;
+		int highestRatingID = 0;
+		for (Movie m : movies) {
+			double nowRating = guessRating(userID, m.getID());
+			// If it got the highest rating we give, return
+			if (nowRating == 4.4) {
+				return m.getID();
+			} else if (nowRating > highestRating) {
+				highestRating = nowRating;
+				highestRatingID = m.getID();
+			}
+		}
+		return highestRatingID;
 	}
 	
 }

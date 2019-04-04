@@ -121,7 +121,7 @@ public class NetflixTester {
 			totalDifference += Math.abs(guessStars-actualStars);
 			totalSquareDifference += (guessStars-actualStars) * (guessStars-actualStars);
 			numberTested++;
-			System.out.println("Tested " + (numberTested+numberPresent) + "/" + testDataLines.size());
+			//System.out.println("Tested " + (numberTested+numberPresent) + "/" + testDataLines.size());
 		}
 		
 		System.out.println("\n***Stopping the clock***");
