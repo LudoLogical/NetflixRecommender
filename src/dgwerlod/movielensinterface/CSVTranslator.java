@@ -6,7 +6,6 @@ import dgwerlod.moviestructures.Tag;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("WeakerAccess")
 public class CSVTranslator {
 
     @SuppressWarnings("Duplicates")

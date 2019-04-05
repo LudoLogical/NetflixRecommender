@@ -31,9 +31,17 @@ public class Movie implements Comparable<Movie> {
         return id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public void addLinks(String imdb, String tmdb) {
         imdbID = imdb;
         tmdbID = tmdb;
+    }
+
+    public String getImdbID() {
+        return imdbID;
     }
 
     public void addRating(Rating r) {

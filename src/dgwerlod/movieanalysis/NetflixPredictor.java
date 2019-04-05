@@ -292,5 +292,9 @@ public class NetflixPredictor {
 		}
 		return highestRatingID;
 	}
+
+	public ArrayList<Movie> getMovies() {
+		return movies;
+	}
 	
 }
