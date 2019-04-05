@@ -278,6 +278,9 @@ public class NetflixPredictor {
 		double highestRating = 0;
 		int highestRatingID = 0;
 		for (Movie m : movies) {
+			if (getRating(userID, m.getID()) != -1) {
+				continue; // no returning rated movies
+			}
 			double nowRating = guessRating(userID, m.getID());
 			// If it got the highest rating we give, return
 			if (nowRating == 4.4) {
