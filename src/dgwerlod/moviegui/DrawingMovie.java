@@ -25,7 +25,7 @@ public class DrawingMovie {
 			if (coverArt != null) {
 				drawer.image(coverArt, x, y,width,height);
 			}
-			drawer.text(movie.getTitle(), x, y);
+			//drawer.text(movie.getTitle(), x, y);
 		}
 
 		drawer.stroke(0);

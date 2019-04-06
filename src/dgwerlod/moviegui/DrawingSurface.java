@@ -3,6 +3,7 @@ package dgwerlod.moviegui;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JOptionPane;
 
@@ -10,7 +11,6 @@ import dgwerlod.movieanalysis.NetflixPredictor;
 import dgwerlod.moviestructures.Movie;
 import processing.core.PApplet;
 import shelby.bugs.FileIO;
-
 
 @SuppressWarnings("WeakerAccess")
 public class DrawingSurface extends PApplet {
@@ -58,11 +58,11 @@ public class DrawingSurface extends PApplet {
 			public void run() {
 				predictor = new NetflixPredictor(moviesFile,ratingsFile,tagsFile,linksFile);
 
-				// TODO
-				// int recommendedID = predictor.recommendMovie(currentUserID);
-				// Movie m = ...
-				// recommendedMovie = new DrawingMovie(m);
-				// recommendedMovie.downloadArt(DrawingSurface.this);
+				int recommendedID = predictor.recommendMovie(currentUserID);
+				ArrayList<Movie> movies = predictor.getMovies();
+				Movie m = movies.get(Collections.binarySearch(movies, new Movie(recommendedID)));
+				recommendedMovie = new DrawingMovie(m);
+				recommendedMovie.downloadArt(DrawingSurface.this);
 				
 				predictorLoaded = true;
 			}

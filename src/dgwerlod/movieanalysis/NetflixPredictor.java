@@ -15,11 +15,11 @@ import java.util.Collections;
 public class NetflixPredictor {
 
 	/* Current Best Score:
-	Runtime: 0:5:32
-	Total difference between guessed and actual ratings: 6782.66324946808
-	Average difference between guessed and actual ratings: 0.6782663249468079
-	Root square mean difference between guessed and actual ratings: 0.8890619580767919
-	 */
+	Runtime: 0:4:686
+	Total difference between guessed and actual ratings: 6807.580465110445
+	Average difference between guessed and actual ratings: 0.6807580465110445
+	Root square mean difference between guessed and actual ratings: 0.8878037622882642
+	*/
 
 	public static final double POPULARITY_WEIGHT = 0.9;
 	public static final double GENRES_WEIGHT = 6.25;
