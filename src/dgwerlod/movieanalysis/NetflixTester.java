@@ -1,6 +1,6 @@
 package dgwerlod.movieanalysis;
 
-import shelby.bugs.FileIO;
+import dgwerlod.movielensinterface.FileIO;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 @SuppressWarnings("WeakerAccess")
 public class NetflixTester {
 	
-	public static final String baseFile = "ml-custom-test" + FileIO.fileSep + "1Ratings.csv";
-	public static final String testFile = "ml-custom-test" + FileIO.fileSep + "1Tests.csv";
+	public static final String baseFile = "ml-custom-test" + FileIO.FILE_SEPARATOR + "1Ratings.csv";
+	public static final String testFile = "ml-custom-test" + FileIO.FILE_SEPARATOR + "1Tests.csv";
 
-	public static final String moviesFile = "ml-latest-small" + FileIO.fileSep + "movies.csv";
-	public static final String linksFile = "ml-latest-small" + FileIO.fileSep + "links.csv";
-	public static final String tagsFile = "ml-latest-small" + FileIO.fileSep + "tags.csv";
+	public static final String moviesFile = "ml-latest-small" + FileIO.FILE_SEPARATOR + "movies.csv";
+	public static final String linksFile = "ml-latest-small" + FileIO.FILE_SEPARATOR + "links.csv";
+	public static final String tagsFile = "ml-latest-small" + FileIO.FILE_SEPARATOR + "tags.csv";
 
 	public static void main(String[] args) throws IOException {
 		
@@ -121,7 +121,7 @@ public class NetflixTester {
 			totalDifference += Math.abs(guessStars-actualStars);
 			totalSquareDifference += (guessStars-actualStars) * (guessStars-actualStars);
 			numberTested++;
-			//System.out.println("Tested " + (numberTested+numberPresent) + "/" + testDataLines.size());
+			System.out.println("Tested " + (numberTested+numberPresent) + "/" + testDataLines.size());
 		}
 		
 		System.out.println("\n***Stopping the clock***");
